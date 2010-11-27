@@ -1,19 +1,18 @@
-document.observe('dom:loaded', function() {
-  // START:MAIN
-  $('items').observe('click', function(e) { // <label id="code.eventDelegation.observe" />
-    var trigger = e.findElement('a.toggler'); // <label id="code.eventDelegation.findElement" />
-    if (!trigger) return;
-    e.stop();
-    var content = trigger.up('p').next('div');
-    if (!content) return;
-    content.toggle();
-    trigger.update(content.visible() ? 'Close' : 'Open');
-    trigger.blur();
-  });
+$(document).ready(function() {
+	// START:MAIN
+	$("a.toggler", "#items").live("click", function(e) {
+		var trigger = $(this);
+		var content = trigger.parent("p").next("div");
+		if (!content.length) { return; }
+		content.toggle();
+		trigger.text(content.is(":visible") ? "Close" : "Open");
+		trigger.blur();
+		return false;
+	});
 
-  $('items').select('li').each(function(item) {
-    item.insert({ top: '<p><a class="toggler" href="#">Open</a></p>' });
-    item.down('div').hide();
-  });
-  // END:MAIN
+	$("#items").find("li").each(function() {
+		$(this).prepend('<p><a href="#" class="toggler">Open</a></p>');
+		$(this).children("div").hide();
+	});
+	// END:MAIN
 });
